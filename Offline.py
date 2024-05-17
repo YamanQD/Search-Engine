@@ -6,7 +6,7 @@ import pandas as pd
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords, wordnet
-from nltk.stem import WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer, PorterStemmer
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -31,13 +31,16 @@ class TextProcessing:
 		words = word_tokenize(txt)
 
 		# Correct word spelling
-		words = TextProcessing.correct_spelling(words)
+		# words = TextProcessing.correct_spelling(words)
 		
 		# Remove stopwords
 		words = TextProcessing.remove_stopwords(words)
 		
 		# Lemmatize words
 		words = TextProcessing.lemmatize(words)
+
+		# Stem words
+		# words = TextProcessing.stem(words)
 
 		# Merge words list into a string
 		txt = ' '.join(words)
@@ -86,7 +89,17 @@ class TextProcessing:
 
 		return lemmatized_words
 
+	@classmethod
+	def stem(cls, words: List[str]) -> List[str]:
+		stemmer = PorterStemmer()
+		stemmed_words = [stemmer.stem(word) for word in words]
+		return stemmed_words
 
+
+vectorizer = TfidfVectorizer(preprocessor=TextProcessing.process, tokenizer=word_tokenize)
+tfidf_matrix = vectorizer.fit_transform(corpus.values())
+df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out(), index=corpus.keys())
+# print(df.to_string(max_cols=10))
 
 new_corpus = {}
 for key, value in corpus.items():
