@@ -153,17 +153,19 @@ class TextProcessing:
 		stemmed_words = [stemmer.stem(word) for word in words]
 		return stemmed_words
 
-# Create VSM Index
-# vectorizer = TfidfVectorizer(preprocessor=TextProcessing.process, tokenizer=word_tokenize)
-# tfidf_matrix = vectorizer.fit_transform(corpus.values())
-# df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out(), index=corpus.keys())
-# print(df.to_string(max_cols=10))
-
 
 # Print corpus after text processing
-new_corpus = {}
-for key, value in corpus.items():
-	value = TextProcessing.process(value)
-	new_corpus[key] = value
+# new_corpus = {}
+# for key, value in corpus.items():
+# 	value = TextProcessing.process(value)
+# 	new_corpus[key] = value
 
-print(new_corpus)
+# print(new_corpus)
+
+
+# Create VSM Index
+vectorizer = TfidfVectorizer(preprocessor=TextProcessing.process, tokenizer=word_tokenize)
+tfidf_matrix = vectorizer.fit_transform(corpus.values())
+df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out(), index=corpus.keys())
+print(df.to_string(max_cols=10))
+
