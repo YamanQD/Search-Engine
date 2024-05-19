@@ -7,7 +7,7 @@ from scipy.sparse import load_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from TextProcessing import TextProcessing
+from text_processing import TextProcessing
 
 
 # Load vectorizer from a file

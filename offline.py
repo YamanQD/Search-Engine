@@ -6,7 +6,7 @@ from scipy.sparse import save_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import word_tokenize
 
-from TextProcessing import TextProcessing
+from text_processing import TextProcessing
 
 # Load the csv file
 df = pd.read_csv('Datasets/wikIR1k/documents.csv')
