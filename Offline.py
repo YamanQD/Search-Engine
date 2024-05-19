@@ -179,6 +179,8 @@ queryVector = vectorizer.transform(query)
 # Calculate cosine similarity
 cosine_scores = cosine_similarity(queryVector, tfidf_matrix)
 
+#TODO: Remove unrelevant docs
+
 # Get the indices of the documents sorted by their cosine similarity score in descending order
 sorted_indices = np.argsort(cosine_scores.flatten())[::-1]
 
