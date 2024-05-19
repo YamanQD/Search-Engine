@@ -58,7 +58,7 @@ class TextProcessing:
 		txt = ' '.join(words)
 
 	    # Remove extra whitespaces
-		txt = TextProcessing.remove_extra_whitespaces(txt)
+		# txt = TextProcessing.remove_extra_whitespaces(txt)
 
 		return txt
 

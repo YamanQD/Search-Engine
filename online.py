@@ -24,9 +24,9 @@ df = pd.read_csv('Datasets/wikIR1k/documents.csv')
 corpus = df.set_index('id_right')['text_right'].to_dict()
 
 # Keep the first 50 documents and delete the rest
-corpus = dict(itertools.islice(corpus.items(), 50))
+# corpus = dict(itertools.islice(corpus.items(), 1000))
 
-df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out(), index=corpus.keys())
+# df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out(), index=corpus.keys())
 # print(df.to_string(max_cols=10))
 
 
@@ -46,7 +46,7 @@ sorted_indices = np.argsort(cosine_scores.flatten())[::-1]
 keys_list = list(corpus.keys())
 
 # Print the top N most relevant documents
-N = 2
+N = 4
 for idx in sorted_indices[:N]:
     doc_id = keys_list[idx]
     print(f"\nDocument ID {doc_id}:\n{corpus[doc_id]}\n")
