@@ -30,8 +30,8 @@ corpus = df.set_index('id_right')['text_right'].to_dict()
 vectorizer = TfidfVectorizer(preprocessor=TextProcessing.process, tokenizer=word_tokenize)
 tfidf_matrix = vectorizer.fit_transform(corpus.values())
 
-save_npz('wikir_index01.npz', tfidf_matrix)
+save_npz('wikir_index02.npz', tfidf_matrix)
 
 # Save vectorizer to a file
-with open('vectorizer01.pickle', 'wb') as f:
+with open('vectorizer02.pickle', 'wb') as f:
     pickle.dump(vectorizer, f)

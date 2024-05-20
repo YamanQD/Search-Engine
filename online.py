@@ -23,7 +23,7 @@ df = pd.read_csv('Datasets/wikIR1k/documents.csv')
 # Convert the dataframe to a dictionary
 corpus = df.set_index('id_right')['text_right'].to_dict()
 
-# Keep the first 50 documents and delete the rest
+# Keep the first 1000 documents and delete the rest
 # corpus = dict(itertools.islice(corpus.items(), 1000))
 
 # df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out(), index=corpus.keys())

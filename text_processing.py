@@ -49,10 +49,10 @@ class TextProcessing:
 		words = TextProcessing.remove_stopwords(words)
 		
 		# Lemmatize words
-		words = TextProcessing.lemmatize(words)
+		# words = TextProcessing.lemmatize(words)
 
 		# Stem words
-		# words = TextProcessing.stem(words)
+		words = TextProcessing.stem(words)
 
 		# Merge words list into a string
 		txt = ' '.join(words)
