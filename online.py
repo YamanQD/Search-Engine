@@ -54,5 +54,3 @@ class SearchEngine:
             docs[doc_id] = corpus[doc_id]
         
         return docs
-
-print(SearchEngine.search("Olympics"))
