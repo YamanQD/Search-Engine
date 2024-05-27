@@ -8,8 +8,13 @@
 </head>
 <body>
     <div class="search-container">
+        <select id="dataset">
+            <option value="antique">Antique</option>
+            <option value="wikir">Wikir</option>
+        </select>
         <input type="text" id="search-input" placeholder="Enter your query...">
         <button onclick="search()">Search</button>
+        <div id="loading" style="display: none;"></div>
     </div>
     <div id="results"></div>
 
