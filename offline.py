@@ -10,25 +10,25 @@ from text_processing import TextProcessing
 class Indexing:
     @classmethod
     def generate_wikir_index(cls, version="00"):
-        # Load the csv file
+        # Load dataset
         df = pd.read_csv('Datasets/wikIR1k/documents.csv')
-        
-        # Convert the dataframe to a dictionary
         corpus = df.set_index('id_right')['text_right'].to_dict()
         
         # Create VSM Index
         vectorizer = TfidfVectorizer(preprocessor=TextProcessing.process, tokenizer=word_tokenize)
         tfidf_matrix = vectorizer.fit_transform(corpus.values())
         
+        # Save index as file
         save_npz(f'Datasets/wikIR1k/index/{version}/wikir_index{version}.npz', tfidf_matrix)
         
-        # Save vectorizer to a file
+        # Save model as file
         with open(f'Datasets/wikIR1k/index/{version}/vectorizer{version}.pickle', 'wb') as f:
             pickle.dump(vectorizer, f)
 
 
     @classmethod
     def generate_antique_index(cls, version="00"):
+        # Load dataset
         corpus = {}
         with open("Datasets/antique/antique-collection.txt", 'r') as file:
             for line in file:
@@ -41,11 +41,12 @@ class Indexing:
         vectorizer = TfidfVectorizer(preprocessor=TextProcessing.process, tokenizer=word_tokenize)
         tfidf_matrix = vectorizer.fit_transform(corpus.values())
         
+        # Save index as file
         save_npz(f'Datasets/antique/index/{version}/antique_index{version}.npz', tfidf_matrix)
         
-        # Save vectorizer to a file
+        # Save model as file
         with open(f'Datasets/antique/index/{version}/vectorizer{version}.pickle', 'wb') as f:
             pickle.dump(vectorizer, f)
 
 
-# IndexingService.generate_antique_index(version="02")
+# Indexing.generate_antique_index(version="02")
