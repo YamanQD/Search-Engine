@@ -1,47 +1,14 @@
 import pickle
-import itertools
 import pandas as pd
 import numpy as np
 from scipy.sparse import load_npz
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from text_processing import TextProcessing
 
 
-# Load vectorizer from a file
-with open('Datasets/wikIR1k/index/01/vectorizer01.pickle', 'rb') as f:
-    wikir_vectorizer = pickle.load(f)
-
-# Load dataset index
-wikir_tfidf_matrix = load_npz('Datasets/wikIR1k/index/01/wikir_index01.npz')
-
-# Load the csv file
-df = pd.read_csv('Datasets/wikIR1k/documents.csv')
-
-# Convert the dataframe to a dictionary
-wikir_corpus = df.set_index('id_right')['text_right'].to_dict()
-
-
-
-# Load vectorizer from a file
-with open('Datasets/antique/index/01/vectorizer01.pickle', 'rb') as f:
-    antique_vectorizer = pickle.load(f)
-
-# Load dataset index
-antique_tfidf_matrix = load_npz('Datasets/antique/index/01/antique_index01.npz')
-
-antique_corpus = {}
-with open("Datasets/antique/antique-collection.txt", 'r') as file:
-    for line in file:
-        line = line.strip()  # Remove leading/trailing whitespace
-        if line:
-            identifier, text = line.split('\t', 1)
-            antique_corpus[identifier] = text
-
-
-class SearchEngine:
+class MatchingRanking:
     @classmethod
     def search(cls, dataset: str, query: str, count=10):
         if dataset == "wikir":
@@ -81,4 +48,26 @@ class SearchEngine:
         
         return docs
 
-# SearchEngine.search("antique", "how sun rises?", 10)
+
+# Load models
+with open('Datasets/wikIR1k/index/01/vectorizer01.pickle', 'rb') as f:
+    wikir_vectorizer = pickle.load(f)
+with open('Datasets/antique/index/01/vectorizer01.pickle', 'rb') as f:
+    antique_vectorizer = pickle.load(f)
+
+
+# Load dataset indices
+wikir_tfidf_matrix = load_npz('Datasets/wikIR1k/index/01/wikir_index01.npz')
+antique_tfidf_matrix = load_npz('Datasets/antique/index/01/antique_index01.npz')
+
+# Load datasets
+df = pd.read_csv('Datasets/wikIR1k/documents.csv')
+wikir_corpus = df.set_index('id_right')['text_right'].to_dict()
+
+antique_corpus = {}
+with open("Datasets/antique/antique-collection.txt", 'r') as file:
+    for line in file:
+        line = line.strip()  # Remove leading/trailing whitespace
+        if line:
+            identifier, text = line.split('\t', 1)
+            antique_corpus[identifier] = text

@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from text_processing import TextProcessing
 
-class IndexingService:
+class Indexing:
     @classmethod
     def generate_wikir_index(cls, version="00"):
         # Load the csv file
