@@ -43,7 +43,7 @@ class TextProcessing:
 		words = word_tokenize(txt)
 
 		# Correct word spelling
-		# words = TextProcessing.correct_spelling(words)
+		words = TextProcessing.correct_spelling(words)
 		
 		# Remove stopwords
 		words = TextProcessing.remove_stopwords(words)

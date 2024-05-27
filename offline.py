@@ -49,4 +49,4 @@ class Indexing:
             pickle.dump(vectorizer, f)
 
 
-# Indexing.generate_antique_index(version="02")
+Indexing.generate_antique_index(version="02")
