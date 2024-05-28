@@ -52,13 +52,13 @@ class MatchingRanking:
 # Load models
 with open('Datasets/wikIR1k/index/01/vectorizer01.pickle', 'rb') as f:
     wikir_vectorizer = pickle.load(f)
-with open('Datasets/antique/index/01/vectorizer01.pickle', 'rb') as f:
+with open('Datasets/antique/index/02/vectorizer02.pickle', 'rb') as f:
     antique_vectorizer = pickle.load(f)
 
 
 # Load dataset indices
 wikir_tfidf_matrix = load_npz('Datasets/wikIR1k/index/01/wikir_index01.npz')
-antique_tfidf_matrix = load_npz('Datasets/antique/index/01/antique_index01.npz')
+antique_tfidf_matrix = load_npz('Datasets/antique/index/02/antique_index02.npz')
 
 # Load datasets
 df = pd.read_csv('Datasets/wikIR1k/documents.csv')
