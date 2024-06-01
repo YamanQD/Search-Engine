@@ -29,8 +29,6 @@ class MatchingRanking:
         # Calculate cosine similarity
         cosine_scores = cosine_similarity(queryVector, tfidf_matrix)
 
-        #TODO: Remove zero score unrelevant docs
-
         # Get the indices of the documents sorted by their cosine similarity score in descending order
         sorted_indices = np.argsort(cosine_scores.flatten())[::-1]
 
@@ -48,17 +46,19 @@ class MatchingRanking:
         
         return docs
 
+    @classmethod
+    def load_index(cls, dataset, version="00"):
+        with open(f'Datasets/{dataset}/index/vectorizer{version}.pickle', 'rb') as f:
+            vectorizer = pickle.load(f)
 
-# Load models
-with open('Datasets/wikIR1k/index/01/vectorizer01.pickle', 'rb') as f:
-    wikir_vectorizer = pickle.load(f)
-with open('Datasets/antique/index/02/vectorizer02.pickle', 'rb') as f:
-    antique_vectorizer = pickle.load(f)
+        tfidf_matrix = load_npz(f'Datasets/{dataset}/index/index{version}.npz')
+        return tfidf_matrix, vectorizer
 
 
-# Load dataset indices
-wikir_tfidf_matrix = load_npz('Datasets/wikIR1k/index/01/wikir_index01.npz')
-antique_tfidf_matrix = load_npz('Datasets/antique/index/02/antique_index02.npz')
+# Load indices and models
+wikir_tfidf_matrix, wikir_vectorizer = MatchingRanking.load_index("wikIR1k", "01")
+antique_tfidf_matrix, antique_vectorizer = MatchingRanking.load_index("antique", "02")
+
 
 # Load datasets
 df = pd.read_csv('Datasets/wikIR1k/documents.csv')
@@ -67,7 +67,7 @@ wikir_corpus = df.set_index('id_right')['text_right'].to_dict()
 antique_corpus = {}
 with open("Datasets/antique/antique-collection.txt", 'r') as file:
     for line in file:
-        line = line.strip()  # Remove leading/trailing whitespace
+        line = line.strip()
         if line:
             identifier, text = line.split('\t', 1)
             antique_corpus[identifier] = text
