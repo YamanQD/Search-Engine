@@ -2,4 +2,4 @@ Datasets
 *.pickle
 *.npz
 __pycache__
-./text_processing.py
+text_processing.py
