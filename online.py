@@ -1,44 +1,34 @@
-import pickle
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 import pandas as pd
-import numpy as np
-from scipy.sparse import load_npz
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
-from text_processing import TextProcessing
+from services.matching_ranking import MatchingRanking
 
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-class MatchingRanking:
-    @classmethod
-    def search(cls, query: str, corpus, tfidf_matrix, vectorizer, count=10):
-        # Transform query to VSM
-        query = [query]
-        queryVector = vectorizer.transform(query)
+@app.get("/search")
+async def search(q: str, d: str):
+        if d == "wikir":
+             return MatchingRanking.search(q, wikir_corpus, wikir_tfidf_matrix, wikir_vectorizer, 10)
+        elif d == "antique":
+             return MatchingRanking.search(q, antique_corpus, antique_tfidf_matrix, antique_vectorizer, 10)
+        else:
+            return {"error": 'Dataset must be either "wikir" or "antique".'}
+    
 
-        # Calculate cosine similarity
-        cosine_scores = cosine_similarity(queryVector, tfidf_matrix)
+# Load dataset indices and models
+wikir_tfidf_matrix, wikir_vectorizer = MatchingRanking.load_index("wikIR1k", "01")
+antique_tfidf_matrix, antique_vectorizer = MatchingRanking.load_index("antique", "02")
 
-        # Get the indices of the documents sorted by their cosine similarity score in descending order
-        sorted_indices = np.argsort(cosine_scores.flatten())[::-1]
+# Load datasets
+df = pd.read_csv('Datasets/wikIR1k/documents.csv')
+wikir_corpus = df.set_index('id_right')['text_right'].to_dict()
 
-        # Create a list of corpus keys
-        keys_list = list(corpus.keys())
-
-        # Return the top [count] relevant documents
-        docs = {}
-        for idx in sorted_indices[:count]:
-            # Check if the cosine score is zero
-            if cosine_scores[0][idx] == 0: break
-
-            doc_id = keys_list[idx]
-            docs[doc_id] = corpus[doc_id]
-        
-        return docs
-
-    @classmethod
-    def load_index(cls, dataset, version="00"):
-        with open(f'Datasets/{dataset}/index/vectorizer{version}.pickle', 'rb') as f:
-            vectorizer = pickle.load(f)
-
-        tfidf_matrix = load_npz(f'Datasets/{dataset}/index/index{version}.npz')
-        return tfidf_matrix, vectorizer
+antique_corpus = {}
+with open("Datasets/antique/antique-collection.txt", 'r') as file:
+    for line in file:
+        line = line.strip()
+        if line:
+            identifier, text = line.split('\t', 1)
+            antique_corpus[identifier] = text
