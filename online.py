@@ -5,6 +5,8 @@ import pandas as pd
 from services.matching_ranking import MatchingRanking
 
 app = FastAPI()
+
+# 127.0.0.1:8000/static/index.html
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/search")
