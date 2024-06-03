@@ -10,18 +10,7 @@ from text_processing import TextProcessing
 
 class MatchingRanking:
     @classmethod
-    def search(cls, dataset: str, query: str, count=10):
-        if dataset == "wikir":
-            vectorizer = wikir_vectorizer
-            tfidf_matrix = wikir_tfidf_matrix
-            corpus = wikir_corpus
-        elif dataset == "antique":
-            vectorizer = antique_vectorizer
-            tfidf_matrix = antique_tfidf_matrix
-            corpus = antique_corpus
-        else:
-            raise NameError("Dataset must be wikir or antique")
-
+    def search(cls, query: str, corpus, tfidf_matrix, vectorizer, count=10):
         # Transform query to VSM
         query = [query]
         queryVector = vectorizer.transform(query)
@@ -53,21 +42,3 @@ class MatchingRanking:
 
         tfidf_matrix = load_npz(f'Datasets/{dataset}/index/index{version}.npz')
         return tfidf_matrix, vectorizer
-
-
-# Load indices and models
-wikir_tfidf_matrix, wikir_vectorizer = MatchingRanking.load_index("wikIR1k", "01")
-antique_tfidf_matrix, antique_vectorizer = MatchingRanking.load_index("antique", "02")
-
-
-# Load datasets
-df = pd.read_csv('Datasets/wikIR1k/documents.csv')
-wikir_corpus = df.set_index('id_right')['text_right'].to_dict()
-
-antique_corpus = {}
-with open("Datasets/antique/antique-collection.txt", 'r') as file:
-    for line in file:
-        line = line.strip()
-        if line:
-            identifier, text = line.split('\t', 1)
-            antique_corpus[identifier] = text

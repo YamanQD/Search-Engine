@@ -35,6 +35,7 @@ class Indexing:
         # Save model as file
         with open(f'Datasets/{dataset_name}/index/vectorizer{version}.pickle', 'wb') as f:
             pickle.dump(vectorizer, f)
-            
+
 
 Indexing.generate_index("Datasets/wikIR1k/documents.csv", "wikIR1k", version="05")
+Indexing.generate_index("Datasets/antique/antique-collection.txt", "antique", version="05")
